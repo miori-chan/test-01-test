@@ -1,39 +1,96 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pastel Store</title>
+    <title>Dreamy Pastel Storefront</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Kanit & Fredoka for friendly pastel aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        pastelPink: { 50: '#FFF0F5', 100: '#FFE4E1', 200: '#FFC0CB', 300: '#FFB6C1', 400: '#FF8DA1', 500: '#FF69B4' },
+                        pastelPurple: { 50: '#F8F4FF', 100: '#F0E6FF', 200: '#E1CEFF', 300: '#C8A2C8', 400: '#B19CD9' },
+                        pastelBlue: { 50: '#F0F8FF', 100: '#E0F2FE', 200: '#BAE6FD', 300: '#7DD3FC' },
+                        pastelMint: { 50: '#F0FDF4', 100: '#DCFCE7', 200: '#BBF7D0', 300: '#86EFAC' },
+                        pastelYellow: { 50: '#FEFCE8', 100: '#FEF9C3', 200: '#FEF08A' }
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(2deg)' }
+                        },
+                        bounceSoft: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+                            '50%': { opacity: '0.9', transform: 'scale(1.05)' }
+                        }
+                    },
+                    animation: {
+                        floating: 'float 4s ease-in-out infinite',
+                        bounceSoft: 'bounceSoft 2s ease-in-out infinite',
+                        pulseGlow: 'pulseGlow 3s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            font-family: 'Kanit', sans-serif;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
+        /* Custom Styles & Glassmorphism Tokens */
         :root {
-            --bg-main: #FFF5F7;
-            --primary: #FFB7B2;
-            --primary-hover: #FF9AA2;
-            --secondary: #E2F0CB;
-            --accent: #B5EAD7;
-            --card-bg: #FFFFFF;
-            --text-main: #5E5061;
-            --text-light: #8E7DBE;
+            --bg-canvas: #FFF5F7;
+            --card-surface: #FFFFFF;
+            --brand-primary: #FF8DA1;
+            --brand-secondary: #B19CD9;
+            --brand-accent: #7DD3FC;
+            --text-main: #4A3E4E;
         }
+
         body {
-            background-color: var(--bg-main);
+            background-color: var(--bg-canvas);
             color: var(--text-main);
+            overflow-x: hidden;
         }
-        .aspect-16-9 {
-            aspect-ratio: 16 / 9;
-        }
+
         .aspect-banner {
             aspect-ratio: 1122 / 495;
         }
-        .custom-shadow {
-            box-shadow: 0 10px 25px -5px rgba(255, 183, 178, 0.25);
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 35px -5px rgba(255, 141, 161, 0.2);
+        }
+
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(255, 141, 161, 0.3);
+        }
+
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -41,260 +98,333 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* SVG Glow Effects */
+        .svg-glow {
+            filter: drop-shadow(0px 4px 10px rgba(255, 141, 161, 0.4));
+        }
     </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="h-full flex flex-col min-h-screen selection:bg-pastelPink-200 selection:text-pastelPink-500">
 
-    <!-- Top Header / Brand Logo & Music Control -->
-    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-pink-100 py-3 px-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <!-- Store Logo & Name -->
+    <!-- TOP NAVIGATION & BRANDING HEADER -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-pastelPink-100/60 py-3 px-6 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Brand Logo & Name -->
             <div class="flex items-center gap-3">
-                <div id="logoContainer" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-pink-200 bg-pink-50 flex items-center justify-center">
-                    <img id="storeLogoImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Store Logo" class="w-full h-full object-cover">
+                <div id="storeLogoContainer" class="relative group cursor-pointer">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-pastelPink-300 to-pastelPurple-300 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300 animate-pulseGlow"></div>
+                    <div class="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-white bg-white flex items-center justify-center shadow-sm">
+                        <img id="storeLogoImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" alt="Logo" class="w-full h-full object-cover">
+                    </div>
                 </div>
                 <div>
-                    <h1 id="storeTitleText" class="font-bold text-lg text-pink-500 leading-tight">Pastel Dream Shop</h1>
-                    <p id="welcomeMsgText" class="text-xs text-purple-400">ยินดีต้อนรับสู่ร้านค้าสุดน่ารัก</p>
+                    <div class="flex items-center gap-2">
+                        <h1 id="storeTitleText" class="font-display font-bold text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400">
+                            Pastel Wonderland
+                        </h1>
+                        <span class="text-[10px] bg-pastelMint-100 text-pastelMint-600 px-2 py-0.5 rounded-full font-semibold border border-pastelMint-200 uppercase tracking-wider">Online</span>
+                    </div>
+                    <p id="welcomeMsgText" class="text-xs text-pastelPurple-400 font-medium">พื้นที่สร้างสรรค์ความสดใสพาสเทล</p>
                 </div>
             </div>
 
-            <!-- Header Actions: Music Player & Admin Login -->
+            <!-- Action Controls: Audio Player & Admin Portal -->
             <div class="flex items-center gap-3">
-                <!-- Music Player Controls -->
-                <div class="flex items-center gap-2 bg-pink-50 px-3 py-1.5 rounded-full border border-pink-200 text-xs">
-                    <button id="playMusicBtn" class="p-1 rounded-full bg-pink-300 text-white hover:bg-pink-400">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <!-- Interactive Audio Player -->
+                <div class="glass-panel px-3.5 py-1.5 rounded-full flex items-center gap-2.5 border border-pastelPink-200 shadow-sm">
+                    <button id="playMusicBtn" class="w-7 h-7 rounded-full bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400 text-white flex items-center justify-center hover:scale-110 active:scale-95 transition shadow-sm" title="เล่นเพลง">
+                        <svg class="w-3.5 h-3.5 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </button>
-                    <button id="pauseMusicBtn" class="p-1 rounded-full bg-pink-300 text-white hover:bg-pink-400 hidden">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    <button id="pauseMusicBtn" class="w-7 h-7 rounded-full bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400 text-white flex items-center justify-center hover:scale-110 active:scale-95 transition shadow-sm hidden" title="หยุดเพลง">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
-                    <span class="text-pink-600 font-medium hidden md:inline">เพลงต้อนรับ</span>
+                    <div class="hidden sm:block text-left">
+                        <div class="text-[10px] text-gray-400 font-medium leading-none">BGM Ambient</div>
+                        <div class="text-xs font-semibold text-pastelPink-500 leading-tight">Pastel Melody</div>
+                    </div>
                     <audio id="bgAudio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"></audio>
                 </div>
 
-                <!-- Admin Status / Login Button -->
-                <button id="openAdminAuthModal" class="px-4 py-1.5 rounded-full text-xs font-medium border border-purple-300 text-purple-600 hover:bg-purple-50">
-                    เข้าสู่ระบบแอดมิน
+                <!-- Admin Auth Modal Trigger -->
+                <button id="openAdminAuthModal" class="px-4 py-2 rounded-full text-xs font-semibold bg-pastelPurple-50 text-pastelPurple-500 border border-pastelPurple-200 hover:bg-pastelPurple-100 hover:text-pastelPurple-600 transition flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span>ระบบแอดมิน</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Screens Container -->
-    <main class="max-w-6xl mx-auto p-4 md:p-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8 pb-32">
 
-        <!-- PAGE 1: HOME PAGE -->
-        <section id="pageHome" class="space-y-6">
+        <!-- PAGE 1: INTERACTIVE HOME PAGE -->
+        <section id="pageHome" class="space-y-8 animate-fadeIn">
 
-            <!-- Banner Section (1122x495 Ratio) -->
-            <div class="relative w-full aspect-banner rounded-3xl overflow-hidden border-4 border-white shadow-lg bg-pink-100">
-                <img id="bannerImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=1122&h=495&fit=crop" class="w-full h-full object-cover" alt="Main Banner">
-                <div class="absolute inset-0 bg-gradient-to-t from-pink-900/40 via-transparent to-transparent flex items-end p-6 md:p-8">
-                    <div class="text-white space-y-1">
-                        <span class="bg-white/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs">ร้านค้าพร้อมให้บริการ</span>
-                        <h2 id="bannerHeading" class="text-xl md:text-3xl font-bold">ต้อนรับความน่ารักแจกความสดใสทุกวัน</h2>
+            <!-- Dynamic Animated Banner Canvas (1122x495 Ratio) -->
+            <div class="relative w-full aspect-banner rounded-3xl overflow-hidden border-4 border-white shadow-xl group bg-gradient-to-br from-pastelPink-100 via-pastelPurple-50 to-pastelBlue-100">
+                <!-- Interactive Canvas for Sparkle Particles -->
+                <canvas id="particleCanvas" class="absolute inset-0 z-10 pointer-events-none w-full h-full"></canvas>
+                
+                <!-- Main Banner Image -->
+                <img id="bannerImg" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=1122&h=495&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Hero Banner">
+                
+                <!-- Overlay Card content -->
+                <div class="absolute inset-0 z-20 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent flex flex-col justify-end p-6 md:p-12">
+                    <div class="max-w-2xl space-y-3">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-white/30 backdrop-blur-md text-white border border-white/40">
+                            <svg class="w-3.5 h-3.5 text-pastelYellow-200 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <span>Collection Update 2026</span>
+                        </span>
+                        <h2 id="bannerHeading" class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-md">
+                            ดินแดนสินค้าพาสเทลน่ารัก ละมุนใจ
+                        </h2>
+                        <p class="text-xs md:text-sm text-pastelPink-50 max-w-lg line-clamp-2">
+                            สัมผัสความน่ารักรูปแบบใหม่ ออกแบบพิเศษสำหรับคนรักความคาวาอี้แบบเรียบหรู มินิมอล
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Store Details & Opening Hours Bar -->
+            <!-- Store Info Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white p-4 rounded-2xl border border-pink-100 flex items-center gap-3">
-                    <div class="p-3 bg-pink-100 rounded-xl text-pink-500">
+                <!-- Opening Hours -->
+                <div class="glass-panel p-5 rounded-2xl border border-pastelPink-100 flex items-center gap-4 hover:border-pastelPink-300 transition">
+                    <div class="w-12 h-12 rounded-2xl bg-pastelPink-100 text-pastelPink-500 flex items-center justify-center shrink-0 shadow-inner">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <div class="text-xs text-gray-400">เวลาเปิด - ปิด บริการ</div>
-                        <div id="openingHoursText" class="font-semibold text-sm text-pink-600">จันทร์ - อาทิตย์ : 09:00 - 20:00 น.</div>
+                        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">เวลาทำการร้านค้า</div>
+                        <div id="openingHoursText" class="font-bold text-sm text-gray-700">จันทร์ - อาทิตย์ : 09:00 - 20:00 น.</div>
                     </div>
                 </div>
 
-                <div class="bg-white p-4 rounded-2xl border border-pink-100 flex items-center gap-3 md:col-span-2">
-                    <div class="p-3 bg-purple-100 rounded-xl text-purple-500">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <!-- Store Description -->
+                <div class="glass-panel p-5 rounded-2xl border border-pastelPurple-100 flex items-center gap-4 md:col-span-2 hover:border-pastelPurple-300 transition">
+                    <div class="w-12 h-12 rounded-2xl bg-pastelPurple-100 text-pastelPurple-500 flex items-center justify-center shrink-0 shadow-inner">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V5"/></svg>
                     </div>
                     <div>
-                        <div class="text-xs text-gray-400">รายละเอียดร้านค้า</div>
-                        <div id="storeDescText" class="text-sm text-gray-600">จำหน่ายสินค้าน่ารัก อุปกรณ์เครื่องเขียน ของตกแต่งสไตล์พาสเทล นำเข้าคุณภาพดี</div>
+                        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">เกี่ยวกับร้านค้า</div>
+                        <div id="storeDescText" class="text-xs md:text-sm text-gray-600 leading-relaxed">
+                            ศูนย์รวมอุปกรณ์เครื่องเขียน ของแต่งบ้าน และแอคเซสเซอรีคัดสรรพิเศษ โทนสีพาสเทลละมุนตา สินค้าคุณภาพสูงส่งตรงถึงบ้านคุณ
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Search and Filter Bar -->
-            <div class="bg-white p-4 rounded-2xl border border-pink-100 space-y-3">
-                <div class="relative">
-                    <input type="text" id="searchInput" placeholder="ค้นหาสินค้าน่ารักๆ ที่คุณต้องการ..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-pink-50/50 border border-pink-200 text-sm focus:outline-none focus:border-pink-400">
-                    <svg class="w-5 h-5 absolute left-3 top-3 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </div>
+            <!-- Filter Controls & Search Bar -->
+            <div class="glass-panel p-5 rounded-3xl border border-pastelPink-200/80 space-y-4">
+                <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                    <!-- Search Field -->
+                    <div class="relative w-full md:w-96">
+                        <input type="text" id="searchInput" placeholder="ค้นหาสินค้าน่ารักที่ต้องการ..." class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/80 border border-pastelPink-200 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-pastelPink-300 transition shadow-inner">
+                        <svg class="w-5 h-5 absolute left-3.5 top-3.5 text-pastelPink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
 
-                <!-- Categories -->
-                <div class="flex gap-2 overflow-x-auto hide-scrollbar pt-1">
-                    <button class="category-btn active bg-pink-400 text-white px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap" data-cat="all">ทั้งหมด</button>
-                    <button class="category-btn bg-pink-50 text-pink-500 hover:bg-pink-100 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap" data-cat="stationery">เครื่องเขียน</button>
-                    <button class="category-btn bg-pink-50 text-pink-500 hover:bg-pink-100 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap" data-cat="decor">ของแต่งห้อง</button>
-                    <button class="category-btn bg-pink-50 text-pink-500 hover:bg-pink-100 px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap" data-cat="acc">แอคเซสเซอรี</button>
+                    <!-- Category Pills -->
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar w-full md:w-auto py-1">
+                        <button class="category-btn active bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400 text-white px-5 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap shadow-sm" data-cat="all">ทั้งหมด</button>
+                        <button class="category-btn bg-white hover:bg-pastelPink-50 text-gray-600 border border-pastelPink-200 px-5 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition" data-cat="stationery">เครื่องเขียน</button>
+                        <button class="category-btn bg-white hover:bg-pastelPink-50 text-gray-600 border border-pastelPink-200 px-5 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition" data-cat="decor">ของแต่งห้อง</button>
+                        <button class="category-btn bg-white hover:bg-pastelPink-50 text-gray-600 border border-pastelPink-200 px-5 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition" data-cat="acc">แอคเซสเซอรี</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Product Grid -->
-            <div>
-                <h3 class="text-base font-bold text-gray-700 mb-3 flex items-center gap-2">
-                    <span>รายการสินค้าแนะนำ</span>
-                </h3>
-                <div id="productGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Products rendered dynamically -->
+            <!-- Product Showcase Grid -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center px-1">
+                    <h3 class="font-display font-bold text-lg md:text-xl text-gray-700 flex items-center gap-2">
+                        <span>รายการสินค้าคัดสรรพิเศษ</span>
+                    </h3>
+                    <span id="productCountBadge" class="text-xs font-medium text-pastelPurple-500 bg-pastelPurple-100 px-3 py-1 rounded-full">4 รายการ</span>
+                </div>
+
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Dynamic Product Cards Injected Here -->
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 2: REVIEWS PAGE -->
-        <section id="pageReviews" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-3xl border border-pink-100 space-y-4">
-                <h2 class="text-lg font-bold text-pink-500">เขียนรีวิวความประทับใจ</h2>
-                <form id="reviewForm" class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" id="revName" placeholder="ชื่อของคุณ" required class="p-2.5 rounded-xl border border-pink-200 text-sm bg-pink-50/30">
-                        <select id="revRating" class="p-2.5 rounded-xl border border-pink-200 text-sm bg-pink-50/30">
-                            <option value="5">คะแนน 5 / 5 (ประทับใจมากที่สุด)</option>
-                            <option value="4">คะแนน 4 / 5 (ประทับใจมาก)</option>
-                            <option value="3">คะแนน 3 / 5 (ปานกลาง)</option>
-                            <option value="2">คะแนน 2 / 5 (พอใช้)</option>
-                            <option value="1">คะแนน 1 / 5 (ปรับปรุง)</option>
-                        </select>
+        <!-- PAGE 2: REVIEWS & FEEDBACK -->
+        <section id="pageReviews" class="hidden space-y-8 animate-fadeIn">
+            <!-- Submit Review Section -->
+            <div class="glass-panel p-6 md:p-8 rounded-3xl border border-pastelPink-200 space-y-6">
+                <div class="border-b border-pastelPink-100 pb-4">
+                    <h2 class="font-display text-xl font-bold text-pastelPink-500">แบ่งปันความรู้สึกของคุณ (Write Review)</h2>
+                    <p class="text-xs text-gray-400 mt-1">รีวิวของคุณช่วยเพิ่มรอยยิ้มให้กับเราและเพื่อนๆ คนอื่นนะ</p>
+                </div>
+
+                <form id="reviewForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-semibold text-gray-600">ชื่อของคุณ</label>
+                            <input type="text" id="revName" placeholder="เช่น คุณมินมิน" required class="w-full p-3 rounded-2xl border border-pastelPink-200 bg-white/80 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-pastelPink-300">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-xs font-semibold text-gray-600">คะแนนความพึงพอใจ</label>
+                            <select id="revRating" class="w-full p-3 rounded-2xl border border-pastelPink-200 bg-white/80 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-pastelPink-300">
+                                <option value="5">คะแนน 5 / 5 (ยอดเยี่ยมที่สุด)</option>
+                                <option value="4">คะแนน 4 / 5 (ประทับใจมาก)</option>
+                                <option value="3">คะแนน 3 / 5 (ปานกลาง)</option>
+                                <option value="2">คะแนน 2 / 5 (พอใช้)</option>
+                                <option value="1">คะแนน 1 / 5 (ควรปรับปรุง)</option>
+                            </select>
+                        </div>
                     </div>
-                    <textarea id="revComment" rows="3" placeholder="แบ่งปันความรู้สึกของคุณที่นี่..." required class="w-full p-2.5 rounded-xl border border-pink-200 text-sm bg-pink-50/30"></textarea>
-                    <button type="submit" class="bg-pink-400 hover:bg-pink-500 text-white font-medium px-6 py-2 rounded-xl text-sm transition">ส่งรีวิว</button>
-                    <p class="text-xs text-gray-400">* รีวิวของคุณจะแสดงบนหน้าเว็บหลังจากได้รับการอนุมัติจากแอดมินแล้ว</p>
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-gray-600">ข้อความรีวิว</label>
+                        <textarea id="revComment" rows="3" placeholder="เขียนความประทับใจเกี่ยวกับสินค้าและบริการ..." required class="w-full p-3 rounded-2xl border border-pastelPink-200 bg-white/80 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-pastelPink-300"></textarea>
+                    </div>
+                    <button type="submit" class="bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400 hover:from-pastelPink-500 hover:to-pastelPurple-500 text-white font-semibold px-8 py-3 rounded-2xl text-xs md:text-sm shadow-md transition transform active:scale-95">
+                        ส่งรีวิวเข้าระบบ
+                    </button>
+                    <p class="text-[11px] text-pastelPurple-400">* หมายเหตุ: รีวิวจะแสดงผลบนหน้าเว็บหลังจากผ่านการตรวจสอบและอนุมัติจากแอดมินแล้ว</p>
                 </form>
             </div>
 
-            <!-- Reviews List -->
-            <div class="space-y-3">
-                <h3 class="text-base font-bold text-gray-700">รีวิวทั้งหมดจากลูกค้า</h3>
-                <div id="publicReviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <!-- Approved Reviews Rendered Here -->
+            <!-- Approved Public Reviews Display -->
+            <div class="space-y-4">
+                <h3 class="font-display font-bold text-lg text-gray-700">เสียงตอบรับจากลูกค้า</h3>
+                <div id="publicReviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Approved Reviews Dynamically Rendered -->
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 3: CONTACT PAGE -->
-        <section id="pageContact" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-3xl border border-pink-100 space-y-6">
-                <div class="text-center max-w-md mx-auto space-y-1">
-                    <h2 class="text-xl font-bold text-pink-500">ช่องทางการติดต่อร้านค้า</h2>
-                    <p class="text-xs text-gray-400">สอบถามรายละเอียดเพิ่มเติม สั่งซื้อสินค้า หรือติดตามข่าวสารได้ตามช่องทางด้านล่างนี้</p>
+        <!-- PAGE 3: CONTACT & SOCIAL CONNECT -->
+        <section id="pageContact" class="hidden space-y-8 animate-fadeIn">
+            <div class="glass-panel p-8 rounded-3xl border border-pastelPink-200 space-y-8 text-center">
+                <div class="max-w-md mx-auto space-y-2">
+                    <h2 class="font-display text-2xl font-bold text-pastelPink-500">ติดต่อและติดตามข่าวสาร</h2>
+                    <p class="text-xs text-gray-500">เรายินดีต้อนรับทุกข้อสงสัยและพร้อมให้บริการคุณด้วยความใส่ใจเสมอ</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Facebook -->
-                    <div class="p-5 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col items-center text-center space-y-2">
-                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white">
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <!-- Facebook Card -->
+                    <div class="glass-panel p-6 rounded-3xl border border-sky-100 bg-sky-50/50 hover:bg-sky-50 transition flex flex-col items-center space-y-3 group">
+                        <div class="w-14 h-14 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition">
+                            <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         </div>
-                        <div class="font-semibold text-gray-700 text-sm">Facebook Page</div>
-                        <div id="fbHandle" class="text-xs text-blue-600 font-medium">PastelDreamShop.Official</div>
-                        <button onclick="copyContact('PastelDreamShop.Official')" class="mt-2 text-xs bg-white text-blue-500 px-3 py-1 rounded-full border border-blue-200 hover:bg-blue-50">คัดลอก</button>
+                        <div class="font-bold text-gray-700 text-sm">Facebook Page</div>
+                        <div id="fbHandle" class="text-xs text-sky-600 font-semibold">PastelDreamShop.Official</div>
+                        <button onclick="copyContactText('PastelDreamShop.Official')" class="w-full py-2 bg-white text-sky-600 rounded-xl border border-sky-200 text-xs font-semibold hover:bg-sky-100 transition shadow-sm">
+                            คัดลอกชื่อเพจ
+                        </button>
                     </div>
 
-                    <!-- Instagram -->
-                    <div class="p-5 rounded-2xl bg-pink-50 border border-pink-100 flex flex-col items-center text-center space-y-2">
-                        <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white">
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <!-- Instagram Card -->
+                    <div class="glass-panel p-6 rounded-3xl border border-pink-100 bg-pink-50/50 hover:bg-pink-50 transition flex flex-col items-center space-y-3 group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition">
+                            <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                         </div>
-                        <div class="font-semibold text-gray-700 text-sm">Instagram</div>
-                        <div id="igHandle" class="text-xs text-pink-600 font-medium">@pasteldream_shop</div>
-                        <button onclick="copyContact('@pasteldream_shop')" class="mt-2 text-xs bg-white text-pink-500 px-3 py-1 rounded-full border border-pink-200 hover:bg-pink-50">คัดลอก</button>
+                        <div class="font-bold text-gray-700 text-sm">Instagram</div>
+                        <div id="igHandle" class="text-xs text-pink-600 font-semibold">@pasteldream_shop</div>
+                        <button onclick="copyContactText('@pasteldream_shop')" class="w-full py-2 bg-white text-pink-600 rounded-xl border border-pink-200 text-xs font-semibold hover:bg-pink-100 transition shadow-sm">
+                            คัดลอก IG
+                        </button>
                     </div>
 
-                    <!-- LINE -->
-                    <div class="p-5 rounded-2xl bg-green-50 border border-green-100 flex flex-col items-center text-center space-y-2">
-                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xs">
+                    <!-- LINE Card -->
+                    <div class="glass-panel p-6 rounded-3xl border border-emerald-100 bg-emerald-50/50 hover:bg-emerald-50 transition flex flex-col items-center space-y-3 group">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500 text-white font-display font-bold text-base flex items-center justify-center shadow-md group-hover:scale-110 transition">
                             LINE
                         </div>
-                        <div class="font-semibold text-gray-700 text-sm">LINE Official</div>
-                        <div id="lineHandle" class="text-xs text-green-600 font-medium">@pasteldream</div>
-                        <button onclick="copyContact('@pasteldream')" class="mt-2 text-xs bg-white text-green-600 px-3 py-1 rounded-full border border-green-200 hover:bg-green-50">คัดลอก</button>
+                        <div class="font-bold text-gray-700 text-sm">LINE Official</div>
+                        <div id="lineHandle" class="text-xs text-emerald-600 font-semibold">@pasteldream</div>
+                        <button onclick="copyContactText('@pasteldream')" class="w-full py-2 bg-white text-emerald-600 rounded-xl border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition shadow-sm">
+                            คัดลอก LINE ID
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- PAGE 4: ADMIN DASHBOARD (Hidden for normal users) -->
-        <section id="pageAdmin" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-3xl border border-purple-200 space-y-6">
-                <div class="flex justify-between items-center border-b pb-4">
-                    <h2 class="text-lg font-bold text-purple-600">แผงควบคุมแอดมิน (Admin Control Panel)</h2>
-                    <button id="adminLogoutBtn" class="text-xs bg-red-100 text-red-500 px-3 py-1 rounded-full hover:bg-red-200">ออกจากระบบ</button>
+        <!-- PAGE 4: FULL ADMIN DASHBOARD -->
+        <section id="pageAdmin" class="hidden space-y-8 animate-fadeIn">
+            <div class="glass-panel p-6 md:p-8 rounded-3xl border border-pastelPurple-300 space-y-8">
+                <div class="flex justify-between items-center border-b border-pastelPurple-100 pb-4">
+                    <div>
+                        <h2 class="font-display text-xl font-bold text-pastelPurple-600">แผงควบคุมระบบ (Admin Control Center)</h2>
+                        <p class="text-xs text-gray-400">ปรับแต่งรูปภาพ สี ข้อความ และจัดการอนุมัติรีวิวแบบ Real-time</p>
+                    </div>
+                    <button id="adminLogoutBtn" class="px-4 py-2 rounded-xl bg-red-100 text-red-500 text-xs font-semibold hover:bg-red-200 transition">
+                        ออกจากระบบ
+                    </button>
                 </div>
 
-                <!-- Color Customization -->
+                <!-- Theme Color Control -->
                 <div class="space-y-3">
-                    <h3 class="text-sm font-semibold text-gray-700">ปรับแต่งสีเว็บไซต์ (ใส่โค้ดสี Hex Code)</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                        <div>
-                            <label class="block text-gray-500 mb-1">สีพื้นหลังหลัก</label>
-                            <input type="color" id="colorBg" class="w-full h-8 rounded border p-1 cursor-pointer">
+                    <h3 class="font-semibold text-sm text-gray-700">1. ปรับเปลี่ยนสีเว็บไซต์ (Hex Theme Picker)</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                        <div class="p-3 bg-white/80 rounded-2xl border border-pastelPurple-100">
+                            <label class="block text-gray-500 mb-1">สีพื้นหลังหลัก (Canvas)</label>
+                            <input type="color" id="colorBg" value="#FFF5F7" class="w-full h-8 rounded-xl border border-gray-200 cursor-pointer">
                         </div>
-                        <div>
-                            <label class="block text-gray-500 mb-1">สีหลัก (Primary)</label>
-                            <input type="color" id="colorPrimary" class="w-full h-8 rounded border p-1 cursor-pointer">
+                        <div class="p-3 bg-white/80 rounded-2xl border border-pastelPurple-100">
+                            <label class="block text-gray-500 mb-1">สีหลัก Primary</label>
+                            <input type="color" id="colorPrimary" value="#FF8DA1" class="w-full h-8 rounded-xl border border-gray-200 cursor-pointer">
                         </div>
-                        <div>
-                            <label class="block text-gray-500 mb-1">สีรอง (Secondary)</label>
-                            <input type="color" id="colorSecondary" class="w-full h-8 rounded border p-1 cursor-pointer">
+                        <div class="p-3 bg-white/80 rounded-2xl border border-pastelPurple-100">
+                            <label class="block text-gray-500 mb-1">สีรอง Secondary</label>
+                            <input type="color" id="colorSecondary" value="#B19CD9" class="w-full h-8 rounded-xl border border-gray-200 cursor-pointer">
                         </div>
-                        <div>
-                            <label class="block text-gray-500 mb-1">สีตัวหนังสือ</label>
-                            <input type="color" id="colorText" class="w-full h-8 rounded border p-1 cursor-pointer">
+                        <div class="p-3 bg-white/80 rounded-2xl border border-pastelPurple-100">
+                            <label class="block text-gray-500 mb-1">สีข้อความหลัก</label>
+                            <input type="color" id="colorText" value="#4A3E4E" class="w-full h-8 rounded-xl border border-gray-200 cursor-pointer">
                         </div>
                     </div>
                 </div>
 
-                <!-- Media Uploads (Logo, Banner, Audio) -->
-                <div class="space-y-4 border-t pt-4">
-                    <h3 class="text-sm font-semibold text-gray-700">จัดการรูปภาพและไฟล์เสียง (อัปโหลดจากเครื่อง/โทรศัพท์)</h3>
-                    
+                <!-- File Upload Controls -->
+                <div class="space-y-3 border-t border-pastelPurple-100 pt-6">
+                    <h3 class="font-semibold text-sm text-gray-700">2. อัปโหลดรูปภาพและสื่อจากเครื่อง (Device Files Direct Upload)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                         <!-- Logo Upload -->
-                        <div class="p-3 bg-purple-50 rounded-xl space-y-2">
-                            <span class="font-medium">เปลี่ยนโลโก้ร้าน</span>
-                            <input type="file" id="uploadLogoInput" accept="image/*" class="w-full text-xs">
+                        <div class="p-4 bg-pastelPurple-50/60 rounded-2xl border border-pastelPurple-100 space-y-2">
+                            <div class="font-semibold text-pastelPurple-700">โลโก้ร้านค้า</div>
+                            <input type="file" id="uploadLogoInput" accept="image/*" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pastelPurple-200 file:text-pastelPurple-700 hover:file:bg-pastelPurple-300">
                         </div>
 
                         <!-- Banner Upload -->
-                        <div class="p-3 bg-purple-50 rounded-xl space-y-2">
-                            <span class="font-medium">เปลี่ยนแบนเนอร์ (1122x495)</span>
-                            <input type="file" id="uploadBannerInput" accept="image/*" class="w-full text-xs">
+                        <div class="p-4 bg-pastelPurple-50/60 rounded-2xl border border-pastelPurple-100 space-y-2">
+                            <div class="font-semibold text-pastelPurple-700">แบนเนอร์หลัก (1122x495 Ratio)</div>
+                            <input type="file" id="uploadBannerInput" accept="image/*" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pastelPurple-200 file:text-pastelPurple-700 hover:file:bg-pastelPurple-300">
                         </div>
 
                         <!-- Audio Upload -->
-                        <div class="p-3 bg-purple-50 rounded-xl space-y-2">
-                            <span class="font-medium">เปลี่ยนไฟล์เพลงน่ารักๆ</span>
-                            <input type="file" id="uploadAudioInput" accept="audio/*" class="w-full text-xs">
+                        <div class="p-4 bg-pastelPurple-50/60 rounded-2xl border border-pastelPurple-100 space-y-2">
+                            <div class="font-semibold text-pastelPurple-700">เพลงประจำร้าน (Audio File)</div>
+                            <input type="file" id="uploadAudioInput" accept="audio/*" class="w-full text-[11px] text-gray-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pastelPurple-200 file:text-pastelPurple-700 hover:file:bg-pastelPurple-300">
                         </div>
                     </div>
                 </div>
 
-                <!-- Text Info Editor -->
-                <div class="space-y-3 border-t pt-4">
-                    <h3 class="text-sm font-semibold text-gray-700">แก้ไขข้อความรายละเอียดร้าน</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                        <input type="text" id="editStoreName" placeholder="ชื่อร้าน" class="p-2 border rounded-xl">
-                        <input type="text" id="editHours" placeholder="เวลาเปิด-ปิด" class="p-2 border rounded-xl">
-                        <input type="text" id="editFb" placeholder="Facebook ID" class="p-2 border rounded-xl">
-                        <input type="text" id="editIg" placeholder="Instagram ID" class="p-2 border rounded-xl">
-                        <input type="text" id="editLine" placeholder="LINE ID" class="p-2 border rounded-xl">
-                        <input type="text" id="editDesc" placeholder="รายละเอียดร้าน" class="p-2 border rounded-xl">
+                <!-- Product Creation Module -->
+                <div class="space-y-3 border-t border-pastelPurple-100 pt-6">
+                    <h3 class="font-semibold text-sm text-gray-700">3. เพิ่มรายการสินค้าใหม่ (Add New Product)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                        <input type="text" id="newProdName" placeholder="ชื่อสินค้า..." class="p-3 rounded-xl border border-pastelPurple-200 bg-white">
+                        <input type="number" id="newProdPrice" placeholder="ราคา (บาท)..." class="p-3 rounded-xl border border-pastelPurple-200 bg-white">
+                        <select id="newProdCat" class="p-3 rounded-xl border border-pastelPurple-200 bg-white">
+                            <option value="stationery">เครื่องเขียน</option>
+                            <option value="decor">ของแต่งห้อง</option>
+                            <option value="acc">แอคเซสเซอรี</option>
+                        </select>
+                        <div class="relative flex items-center">
+                            <input type="file" id="newProdImgFile" accept="image/*" class="w-full text-[10px] text-gray-500 file:mr-2 file:py-1.5 file:px-2 file:rounded-xl file:border-0 file:bg-pastelPink-100 file:text-pastelPink-600">
+                        </div>
                     </div>
-                    <button id="saveTextDetailsBtn" class="bg-purple-500 text-white px-4 py-1.5 rounded-xl text-xs hover:bg-purple-600">บันทึกข้อความ</button>
+                    <button id="addNewProductBtn" class="px-6 py-2.5 bg-pastelPurple-500 text-white rounded-xl text-xs font-semibold hover:bg-pastelPurple-600 transition shadow-sm">
+                        เพิ่มสินค้าลงหน้าร้าน
+                    </button>
                 </div>
 
-                <!-- Review Approval Section -->
-                <div class="space-y-3 border-t pt-4">
-                    <h3 class="text-sm font-semibold text-gray-700">อนุมัติรีวิวจากลูกค้า (ต้องกดอนุมัติก่อนจึงจะโชว์)</h3>
-                    <div id="pendingReviewsContainer" class="space-y-2">
-                        <!-- Pending reviews list -->
+                <!-- Review Approval Panel -->
+                <div class="space-y-3 border-t border-pastelPurple-100 pt-6">
+                    <h3 class="font-semibold text-sm text-gray-700">4. อนุมัติรีวิวจากลูกค้า (Review Approval Queue)</h3>
+                    <div id="pendingReviewsContainer" class="space-y-3">
+                        <!-- Pending reviews injected dynamically -->
                     </div>
                 </div>
             </div>
@@ -302,140 +432,279 @@
 
     </main>
 
-    <!-- BOTTOM FIXED NAVIGATION BAR -->
-    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-lg border-t border-pink-100 shadow-lg py-2 px-6">
-        <div class="max-w-md mx-auto flex justify-around items-center">
-            <!-- Nav Item 1: Home -->
-            <button class="nav-btn flex flex-col items-center gap-1 text-pink-500 active-nav" data-page="pageHome">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span class="text-[10px] font-medium">หน้าแรก</span>
-            </button>
-
-            <!-- Nav Item 2: Reviews -->
-            <button class="nav-btn flex flex-col items-center gap-1 text-gray-400 hover:text-pink-400" data-page="pageReviews">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                <span class="text-[10px] font-medium">รีวิวทั้งหมด</span>
-            </button>
-
-            <!-- Nav Item 3: Contact -->
-            <button class="nav-btn flex flex-col items-center gap-1 text-gray-400 hover:text-pink-400" data-page="pageContact">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                <span class="text-[10px] font-medium">ติดต่อเรา</span>
-            </button>
-
-            <!-- Nav Item 4: Admin (Dynamic display) -->
-            <button id="adminNavTab" class="nav-btn hidden flex-col items-center gap-1 text-purple-500" data-page="pageAdmin">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span class="text-[10px] font-medium">แอดมิน</span>
-            </button>
+    <!-- INTERACTIVE FLOATING MASCOT -->
+    <div id="mascotWrapper" class="fixed bottom-24 right-6 z-40 flex flex-col items-end pointer-events-auto select-none animate-floating">
+        <!-- Interactive Speech Bubble -->
+        <div id="mascotBubble" class="mb-2 max-w-xs glass-panel p-3.5 rounded-2xl rounded-br-none border border-pastelPink-200 shadow-lg text-xs font-medium text-gray-700 transition-all duration-300 transform scale-100 opacity-100">
+            <span id="mascotText">ยินดีต้อนรับสู่ Pastel Wonderland น้า! มีอะไรให้ยูกิช่วยไหมคะ?</span>
         </div>
-    </nav>
+        
+        <!-- Mascot Vector Avatar Trigger -->
+        <button id="mascotAvatarBtn" class="relative group w-16 h-16 rounded-full bg-gradient-to-tr from-pastelPink-300 via-pastelPurple-200 to-pastelBlue-200 p-1 shadow-xl hover:scale-110 active:scale-95 transition">
+            <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-white">
+                <!-- Custom SVG Mascot (Cute Pastel Cloud Character) -->
+                <svg class="w-10 h-10 svg-glow" viewBox="0 0 64 64" fill="none">
+                    <path d="M46 22C46 16.4772 41.5228 12 36 12C32.1818 12 28.8781 14.1417 27.1818 17.2727C25.7273 16.4545 24.0455 16 22.2727 16C16.6009 16 12 20.6009 12 26.2727C12 27.0909 12.0909 27.9091 12.2727 28.6818C9.72727 30.3636 8 33.2727 8 36.6364C8 41.8091 12.1909 46 17.3636 46H46.6364C51.8091 46 56 41.8091 56 36.6364C56 31.8182 52.3636 27.8182 47.6364 27.3636C46.6364 24.2727 46.5455 22.3636 46 22Z" fill="#FFC0CB"/>
+                    <!-- Eyes -->
+                    <circle cx="24" cy="32" r="2.5" fill="#5E5061"/>
+                    <circle cx="40" cy="32" r="2.5" fill="#5E5061"/>
+                    <!-- Blushes -->
+                    <ellipse cx="20" cy="35" rx="3" ry="1.5" fill="#FF8DA1"/>
+                    <ellipse cx="44" cy="35" rx="3" ry="1.5" fill="#FF8DA1"/>
+                    <!-- Cute Smile -->
+                    <path d="M29 36C29 37.5 30.3431 39 32 39C33.6569 39 35 37.5 35 36" stroke="#5E5061" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-pastelMint-300 border-2 border-white rounded-full"></span>
+        </button>
+    </div>
 
-    <!-- Admin Login Modal -->
-    <div id="adminAuthModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white p-6 rounded-3xl max-w-sm w-full space-y-4 relative border border-pink-100">
-            <button id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-sm">✕</button>
-            <h3 class="text-base font-bold text-center text-pink-500">เข้าสู่ระบบแอดมินด้วยอีเมล</h3>
+    <!-- QUICK-VIEW PRODUCT MODAL -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 hidden animate-fadeIn">
+        <div class="glass-panel p-6 md:p-8 rounded-3xl max-w-lg w-full space-y-6 relative border border-white shadow-2xl">
+            <button id="closeQuickViewBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-pastelPink-100 text-pastelPink-500 flex items-center justify-center hover:bg-pastelPink-200 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <div class="flex flex-col sm:flex-row gap-6 items-center">
+                <div class="w-full sm:w-1/2 aspect-square rounded-2xl overflow-hidden border-2 border-pastelPink-100 shadow-inner bg-pastelPink-50">
+                    <img id="modalImg" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="w-full sm:w-1/2 space-y-3">
+                    <span id="modalCat" class="px-3 py-1 rounded-full text-[10px] font-semibold bg-pastelPurple-100 text-pastelPurple-600 uppercase">Category</span>
+                    <h3 id="modalTitle" class="font-display font-bold text-lg text-gray-800 leading-tight">Product Title</h3>
+                    <div id="modalPrice" class="font-display font-bold text-2xl text-pastelPink-500">฿0</div>
+                    <p class="text-xs text-gray-500">สินค้าลิขสิทธิ์แท้ ผลิตจากวัสดุพรีเมียม ปลอดภัย ดีไซน์หวานละมุน</p>
+                    <button id="modalBuyBtn" class="w-full py-3 bg-gradient-to-r from-pastelPink-400 to-pastelPurple-400 text-white font-semibold rounded-2xl text-xs hover:shadow-lg active:scale-95 transition">
+                        ยืนยันการสั่งซื้อ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN AUTHENTICATION MODAL -->
+    <div id="adminAuthModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 hidden animate-fadeIn">
+        <div class="glass-panel p-6 md:p-8 rounded-3xl max-w-sm w-full space-y-5 relative border border-white shadow-2xl">
+            <button id="closeAuthModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            
+            <div class="text-center space-y-1">
+                <h3 class="font-display font-bold text-lg text-pastelPurple-600">เข้าสู่ระบบแอดมิน</h3>
+                <p class="text-xs text-gray-400">กรุณากรอกรหัสผ่านเข้าสู่ระบบหลังบ้าน</p>
+            </div>
+
             <form id="adminLoginForm" class="space-y-3">
-                <input type="email" id="adminEmail" placeholder="admin@pastelstore.com" required class="w-full p-2.5 rounded-xl border border-pink-200 text-sm bg-pink-50/30">
-                <input type="password" id="adminPass" placeholder="รหัสผ่าน" required class="w-full p-2.5 rounded-xl border border-pink-200 text-sm bg-pink-50/30">
-                <button type="submit" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-medium py-2 rounded-xl text-sm transition">เข้าสู่ระบบ</button>
+                <div>
+                    <input type="email" id="adminEmail" placeholder="admin@pastel.com" value="admin@pastel.com" required class="w-full p-3 rounded-2xl border border-pastelPurple-200 bg-white/80 text-xs focus:outline-none focus:ring-2 focus:ring-pastelPurple-300">
+                </div>
+                <div>
+                    <input type="password" id="adminPass" placeholder="รหัสผ่าน (อะไรก็ได้)" required class="w-full p-3 rounded-2xl border border-pastelPurple-200 bg-white/80 text-xs focus:outline-none focus:ring-2 focus:ring-pastelPurple-300">
+                </div>
+                <button type="submit" class="w-full py-3 bg-pastelPurple-500 hover:bg-pastelPurple-600 text-white font-semibold rounded-2xl text-xs transition shadow-md">
+                    ยืนยันการเข้าสู่ระบบ
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Application Script Logic -->
+    <!-- FLOATING PILL BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-40 glass-pill rounded-full px-4 py-2.5 max-w-md w-11/12 shadow-2xl">
+        <div class="flex justify-around items-center">
+            <!-- Nav 1: Home -->
+            <button class="nav-btn flex flex-col items-center gap-1 text-pastelPink-500 font-semibold active-nav transition" data-page="pageHome">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="text-[10px]">หน้าแรก</span>
+            </button>
+
+            <!-- Nav 2: Reviews -->
+            <button class="nav-btn flex flex-col items-center gap-1 text-gray-400 hover:text-pastelPink-400 transition" data-page="pageReviews">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+                <span class="text-[10px]">รีวิว</span>
+            </button>
+
+            <!-- Nav 3: Contact -->
+            <button class="nav-btn flex flex-col items-center gap-1 text-gray-400 hover:text-pastelPink-400 transition" data-page="pageContact">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <span class="text-[10px]">ติดต่อเรา</span>
+            </button>
+
+            <!-- Nav 4: Admin (Dynamic toggle) -->
+            <button id="adminNavTab" class="nav-btn hidden flex-col items-center gap-1 text-pastelPurple-500 transition" data-page="pageAdmin">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span class="text-[10px]">แอดมิน</span>
+            </button>
+        </div>
+    </nav>
+
     <script>
-        // Store Data State
-        const storeData = {
-            isAdminLoggedIn: false,
+        // Central Store Application State
+        const state = {
+            isAdmin: false,
             products: [
-                { id: 1, name: "สมุดโน้ตพาสเทล A5", price: 89, category: "stationery", img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=300" },
-                { id: 2, name: "ปากกาเจลโทนพาสเทล 6 สี", price: 120, category: "stationery", img: "https://images.unsplash.com/photo-1585336261026-6757f541a674?w=300" },
-                { id: 3, name: "โคมไฟตั้งโต๊ะนุ่มฟู", price: 350, category: "decor", img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=300" },
-                { id: 4, name: "กระเป๋าผ้าแคนวาสสีละมุน", price: 250, category: "acc", img: "https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?w=300" }
+                { id: 1, name: "สมุดโน้ตปกแข็ง Pastel Dream A5", price: 129, category: "stationery", img: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400" },
+                { id: 2, name: "ชุดปากกาไฮไลท์สีพาสเทล 6 สี", price: 189, category: "stationery", img: "https://images.unsplash.com/photo-1585336261026-6757f541a674?w=400" },
+                { id: 3, name: "โคมไฟตั้งโต๊ะนุ่มฟูรูปก้อนเมฆ", price: 450, category: "decor", img: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400" },
+                { id: 4, name: "กระเป๋าผ้าแคนวาสละมุนละไม", price: 290, category: "acc", img: "https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?w=400" }
             ],
             reviews: [
-                { id: 1, name: "คุณมินท์", rating: 5, comment: "สินค้าน่ารักมากค่ะ แพ็คของมาดีมากๆ เลย", approved: true },
-                { id: 2, name: "คุณพลอย", rating: 5, comment: "ส่งไวมาก คุณภาพสมราคา จะอุดหนุนอีกแน่นอนค่ะ", approved: true }
+                { id: 1, name: "คุณเปียโน", rating: 5, comment: "แพ็คสินค้ามาอย่างน่ารัก มีของแถมให้ด้วย ชอบมากๆ ค่ะ!", approved: true },
+                { id: 2, name: "คุณเนย", rating: 5, comment: "สีสวยตรงปก โทนน่ารักละมุนตรงตามรูปเลยค่ะ", approved: true }
+            ],
+            mascotQuotes: [
+                "ยินดีต้อนรับสู่ Pastel Wonderland น้า!",
+                "ลองกดดูสินค้าไฮไลท์วันนี้สิคะ น่ารักมากๆ เล๊ย!",
+                "วันนี้อากาศดีจัง มาเติมความสดใสด้วยกันนะคะ",
+                "อย่าลืมเปิดเพลง BGM ฟังเบาๆ ตอนเลือกดูสินค้านะคะ"
             ]
         };
 
-        // Navigation Switcher
-        const navButtons = document.querySelectorAll('.nav-btn');
-        const pages = {
-            pageHome: document.getElementById('pageHome'),
-            pageReviews: document.getElementById('pageReviews'),
-            pageContact: document.getElementById('pageContact'),
-            pageAdmin: document.getElementById('pageAdmin')
+        // Window Onload Main Application Initialization
+        window.onload = function() {
+            initParticles();
+            initNavigation();
+            initAudioPlayer();
+            initMascot();
+            renderProducts();
+            renderReviews();
+            initAdminControls();
+            initQuickView();
         };
 
-        navButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetPage = btn.getAttribute('data-page');
-                
-                // Hide all pages
-                Object.values(pages).forEach(page => page.classList.add('hidden'));
-                
-                // Show selected page
-                pages[targetPage].classList.remove('hidden');
+        // Particle Effect for Banner Canvas
+        function initParticles() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
 
-                // Update active nav button state
-                navButtons.forEach(b => {
-                    b.classList.remove('text-pink-500');
-                    b.classList.add('text-gray-400');
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const particles = Array.from({ length: 30 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 4 + 2,
+                speedY: Math.random() * 0.8 + 0.2,
+                opacity: Math.random() * 0.7 + 0.3,
+                color: ['#FFC0CB', '#E1CEFF', '#BAE6FD', '#FEF08A'][Math.floor(Math.random() * 4)]
+            }));
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    if (p.y < 0) p.y = canvas.height;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fill();
                 });
-                btn.classList.remove('text-gray-400');
-                btn.classList.add('text-pink-500');
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
+
+        // Bottom Navigation Logic
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const pages = {
+                pageHome: document.getElementById('pageHome'),
+                pageReviews: document.getElementById('pageReviews'),
+                pageContact: document.getElementById('pageContact'),
+                pageAdmin: document.getElementById('pageAdmin')
+            };
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetPage = btn.getAttribute('data-page');
+
+                    Object.values(pages).forEach(page => page.classList.add('hidden'));
+                    pages[targetPage].classList.remove('hidden');
+
+                    navButtons.forEach(b => {
+                        b.classList.remove('text-pastelPink-500', 'font-semibold');
+                        b.classList.add('text-gray-400');
+                    });
+                    btn.classList.remove('text-gray-400');
+                    btn.classList.add('text-pastelPink-500', 'font-semibold');
+                });
             });
-        });
+        }
 
-        // Audio Player Controls
-        const bgAudio = document.getElementById('bgAudio');
-        const playMusicBtn = document.getElementById('playMusicBtn');
-        const pauseMusicBtn = document.getElementById('pauseMusicBtn');
+        // Mascot Dialog Interaction
+        function initMascot() {
+            const mascotBtn = document.getElementById('mascotAvatarBtn');
+            const mascotText = document.getElementById('mascotText');
+            let quoteIdx = 0;
 
-        playMusicBtn.addEventListener('click', () => {
-            bgAudio.play();
-            playMusicBtn.classList.add('hidden');
-            pauseMusicBtn.classList.remove('hidden');
-        });
+            mascotBtn.addEventListener('click', () => {
+                quoteIdx = (quoteIdx + 1) % state.mascotQuotes.length;
+                mascotText.innerText = state.mascotQuotes[quoteIdx];
+            });
+        }
 
-        pauseMusicBtn.addEventListener('click', () => {
-            bgAudio.pause();
-            pauseMusicBtn.classList.add('hidden');
-            playMusicBtn.classList.remove('hidden');
-        });
+        // Audio Player Handler
+        function initAudioPlayer() {
+            const bgAudio = document.getElementById('bgAudio');
+            const playBtn = document.getElementById('playMusicBtn');
+            const pauseBtn = document.getElementById('pauseMusicBtn');
 
-        // Render Products
-        function renderProducts(filterCategory = 'all', searchQuery = '') {
+            playBtn.addEventListener('click', () => {
+                bgAudio.play();
+                playBtn.classList.add('hidden');
+                pauseBtn.classList.remove('hidden');
+            });
+
+            pauseBtn.addEventListener('click', () => {
+                bgAudio.pause();
+                pauseBtn.classList.add('hidden');
+                playBtn.classList.remove('hidden');
+            });
+        }
+
+        // Render Product Showcase Cards
+        function renderProducts(filterCat = 'all', searchQuery = '') {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
 
-            const filtered = storeData.products.filter(p => {
-                const matchCat = filterCategory === 'all' || p.category === filterCategory;
+            const filtered = state.products.filter(p => {
+                const matchCat = filterCat === 'all' || p.category === filterCat;
                 const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
                 return matchCat && matchSearch;
             });
 
+            document.getElementById('productCountBadge').innerText = `${filtered.length} รายการ`;
+
             filtered.forEach(p => {
                 const card = document.createElement('div');
-                card.className = "bg-white p-3 rounded-2xl border border-pink-100 flex flex-col justify-between space-y-2 hover:shadow-md transition";
+                card.className = "product-card glass-panel rounded-3xl p-4 border border-pastelPink-100 flex flex-col justify-between space-y-3 cursor-pointer group";
                 card.innerHTML = `
-                    <div class="aspect-square rounded-xl overflow-hidden bg-pink-50">
-                        <img src="${p.img}" class="w-full h-full object-cover">
+                    <div class="relative aspect-square rounded-2xl overflow-hidden bg-pastelPink-50 border border-pastelPink-100">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <span class="absolute top-2 right-2 bg-white/90 backdrop-blur-md text-pastelPink-500 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-sm">
+                            ฿${p.price}
+                        </span>
                     </div>
-                    <div>
-                        <div class="text-xs font-semibold text-gray-700 truncate">${p.name}</div>
-                        <div class="text-sm font-bold text-pink-500 mt-1">฿${p.price}</div>
+                    <div class="space-y-1">
+                        <div class="text-[10px] font-bold text-pastelPurple-400 uppercase tracking-wider">${p.category}</div>
+                        <h4 class="font-semibold text-xs md:text-sm text-gray-700 truncate">${p.name}</h4>
                     </div>
-                    <button class="w-full bg-pink-100 hover:bg-pink-200 text-pink-600 text-xs py-1.5 rounded-xl font-medium">สั่งซื้อสินค้า</button>
+                    <button onclick="openQuickView(${p.id})" class="w-full py-2 bg-pastelPink-50 hover:bg-pastelPink-400 text-pastelPink-600 hover:text-white rounded-xl text-xs font-semibold transition border border-pastelPink-200">
+                        ดูรายละเอียด
+                    </button>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Search and Filter Listeners
+        // Search & Category Filters
         document.getElementById('searchInput').addEventListener('input', (e) => {
             renderProducts('all', e.target.value);
         });
@@ -443,146 +712,185 @@
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => {
-                    b.classList.remove('bg-pink-400', 'text-white');
-                    b.classList.add('bg-pink-50', 'text-pink-500');
+                    b.classList.remove('bg-gradient-to-r', 'from-pastelPink-400', 'to-pastelPurple-400', 'text-white');
+                    b.classList.add('bg-white', 'text-gray-600');
                 });
-                btn.classList.remove('bg-pink-50', 'text-pink-500');
-                btn.classList.add('bg-pink-400', 'text-white');
+                btn.classList.remove('bg-white', 'text-gray-600');
+                btn.classList.add('bg-gradient-to-r', 'from-pastelPink-400', 'to-pastelPurple-400', 'text-white');
                 renderProducts(btn.dataset.cat);
             });
         });
 
-        // Reviews Render Logic
+        // Quick View Modal Controls
+        function initQuickView() {
+            const modal = document.getElementById('quickViewModal');
+            document.getElementById('closeQuickViewBtn').addEventListener('click', () => modal.classList.add('hidden'));
+            document.getElementById('modalBuyBtn').addEventListener('click', () => {
+                alert('เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้วค่ะ!');
+                modal.classList.add('hidden');
+            });
+        }
+
+        window.openQuickView = function(id) {
+            const product = state.products.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('modalImg').src = product.img;
+            document.getElementById('modalTitle').innerText = product.name;
+            document.getElementById('modalCat').innerText = product.category;
+            document.getElementById('modalPrice').innerText = `฿${product.price}`;
+            document.getElementById('quickViewModal').classList.remove('hidden');
+        };
+
+        // Render Approved & Pending Reviews
         function renderReviews() {
             const publicContainer = document.getElementById('publicReviewsContainer');
             const pendingContainer = document.getElementById('pendingReviewsContainer');
-            
+
             publicContainer.innerHTML = '';
             pendingContainer.innerHTML = '';
 
-            storeData.reviews.forEach(rev => {
+            state.reviews.forEach(rev => {
                 if (rev.approved) {
-                    const revCard = document.createElement('div');
-                    revCard.className = "bg-white p-4 rounded-2xl border border-pink-100 space-y-1 text-xs";
-                    revCard.innerHTML = `
+                    const card = document.createElement('div');
+                    card.className = "glass-panel p-4 rounded-2xl border border-pastelPink-100 space-y-2 text-xs";
+                    card.innerHTML = `
                         <div class="flex justify-between items-center">
                             <span class="font-bold text-gray-700">${rev.name}</span>
-                            <span class="text-yellow-500 font-semibold">คะแนน ${rev.rating}/5</span>
+                            <span class="text-pastelYellow-500 font-bold">คะแนน ${rev.rating}/5</span>
                         </div>
-                        <p class="text-gray-600">${rev.comment}</p>
+                        <p class="text-gray-600 leading-relaxed">${rev.comment}</p>
                     `;
-                    publicContainer.appendChild(revCard);
+                    publicContainer.appendChild(card);
                 } else {
-                    const pendCard = document.createElement('div');
-                    pendCard.className = "bg-white p-3 rounded-xl border border-purple-100 flex justify-between items-center text-xs";
-                    pendCard.innerHTML = `
+                    const card = document.createElement('div');
+                    card.className = "p-3 bg-white/80 rounded-xl border border-pastelPurple-200 flex justify-between items-center text-xs";
+                    card.innerHTML = `
                         <div>
-                            <span class="font-bold text-gray-700">${rev.name}</span> (${rev.rating}/5)
-                            <p class="text-gray-500">${rev.comment}</p>
+                            <span class="font-bold text-gray-700">${rev.name}</span> (คะแนน: ${rev.rating}/5)
+                            <p class="text-gray-500 text-[11px]">${rev.comment}</p>
                         </div>
-                        <button onclick="approveReview(${rev.id})" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-green-600">อนุมัติ</button>
+                        <button onclick="approveReview(${rev.id})" class="px-3 py-1 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition">
+                            อนุมัติ
+                        </button>
                     `;
-                    pendingContainer.appendChild(pendCard);
+                    pendingContainer.appendChild(card);
                 }
             });
         }
 
-        // New Review Submission
+        // Review Submission
         document.getElementById('reviewForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('revName').value;
             const rating = document.getElementById('revRating').value;
             const comment = document.getElementById('revComment').value;
 
-            storeData.reviews.push({
-                id: Date.now(),
-                name,
-                rating,
-                comment,
-                approved: false
-            });
-
-            alert('ส่งรีวิวเรียบร้อยแล้วค่ะ! รอแอดมินตรวจสอบและอนุมัตินะคะ');
+            state.reviews.push({ id: Date.now(), name, rating, comment, approved: false });
+            alert('ส่งรีวิวเข้าสู่ระบบเรียบร้อยแล้วค่ะ! รอแอนมินอนุมัตินะคะ');
             document.getElementById('reviewForm').reset();
             renderReviews();
         });
 
         window.approveReview = function(id) {
-            const rev = storeData.reviews.find(r => r.id === id);
+            const rev = state.reviews.find(r => r.id === id);
             if (rev) {
                 rev.approved = true;
                 renderReviews();
             }
         };
 
-        // Admin Modal Authentication
-        const modal = document.getElementById('adminAuthModal');
-        document.getElementById('openAdminAuthModal').addEventListener('click', () => modal.classList.remove('hidden'));
-        document.getElementById('closeAuthModal').addEventListener('click', () => modal.classList.add('hidden'));
+        // Admin Management Logic & Direct Device File Uploads
+        function initAdminControls() {
+            const modal = document.getElementById('adminAuthModal');
+            document.getElementById('openAdminAuthModal').addEventListener('click', () => modal.classList.remove('hidden'));
+            document.getElementById('closeAuthModal').addEventListener('click', () => modal.classList.add('hidden'));
 
-        document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            modal.classList.add('hidden');
-            storeData.isAdminLoggedIn = true;
-            document.getElementById('adminNavTab').classList.remove('hidden');
-            document.getElementById('adminNavTab').click();
-            alert('เข้าสู่ระบบแอดมินสำเร็จ!');
-        });
+            document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                modal.classList.add('hidden');
+                state.isAdmin = true;
+                document.getElementById('adminNavTab').classList.remove('hidden');
+                document.getElementById('adminNavTab').click();
+            });
 
-        document.getElementById('adminLogoutBtn').addEventListener('click', () => {
-            storeData.isAdminLoggedIn = false;
-            document.getElementById('adminNavTab').classList.add('hidden');
-            document.querySelector('[data-page="pageHome"]').click();
-        });
+            document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+                state.isAdmin = false;
+                document.getElementById('adminNavTab').classList.add('hidden');
+                document.querySelector('[data-page="pageHome"]').click();
+            });
 
-        // Image File Upload Handlers (Device / Phone Upload)
-        document.getElementById('uploadLogoInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
+            // Theme Color Picker Updates
+            document.getElementById('colorBg').addEventListener('input', (e) => {
+                document.documentElement.style.setProperty('--bg-canvas', e.target.value);
+            });
+
+            // Device Photo Upload Handlers
+            document.getElementById('uploadLogoInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => document.getElementById('storeLogoImg').src = evt.target.result;
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('uploadBannerInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => document.getElementById('bannerImg').src = evt.target.result;
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('uploadAudioInput').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const audio = document.getElementById('bgAudio');
+                    audio.src = URL.createObjectURL(file);
+                    audio.play();
+                }
+            });
+
+            // Add Product Handler
+            document.getElementById('addNewProductBtn').addEventListener('click', () => {
+                const name = document.getElementById('newProdName').value;
+                const price = document.getElementById('newProdPrice').value;
+                const category = document.getElementById('newProdCat').value;
+                const fileInput = document.getElementById('newProdImgFile');
+
+                if (!name || !price || !fileInput.files[0]) {
+                    alert('กรุณากรอกข้อมูลและเลือกรูปภาพสินค้าให้ครบถ้วนค่ะ');
+                    return;
+                }
+
                 const reader = new FileReader();
-                reader.onload = (event) => {
-                    document.getElementById('storeLogoImg').src = event.target.result;
+                reader.onload = (evt) => {
+                    state.products.push({
+                        id: Date.now(),
+                        name,
+                        price: parseFloat(price),
+                        category,
+                        img: evt.target.result
+                    });
+                    renderProducts();
+                    alert('เพิ่มรายการสินค้าใหม่เรียบร้อยแล้วค่ะ');
                 };
-                reader.readAsDataURL(file);
-            }
-        });
+                reader.readAsDataURL(fileInput.files[0]);
+            });
+        }
 
-        document.getElementById('uploadBannerInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    document.getElementById('bannerImg').src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('uploadAudioInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const url = URL.createObjectURL(file);
-                bgAudio.src = url;
-                bgAudio.play();
-                playMusicBtn.classList.add('hidden');
-                pauseMusicBtn.classList.remove('hidden');
-            }
-        });
-
-        // Color Customization Handler
-        document.getElementById('colorBg').addEventListener('input', (e) => {
-            document.body.style.backgroundColor = e.target.value;
-        });
-
-        // Copy Contact Link Function
-        window.copyContact = function(text) {
-            navigator.clipboard.writeText(text);
+        // Copy Contact Function
+        window.copyContactText = function(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
             alert('คัดลอก: ' + text + ' เรียบร้อยแล้วค่ะ');
         };
-
-        // Initial Initialization
-        renderProducts();
-        renderReviews();
     </script>
 </body>
 </html>
